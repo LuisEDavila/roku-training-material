@@ -1,0 +1,8 @@
+<component name="UserInfoNode" extends="Node">
+    <interface>
+        <field id="name" type="string" />
+        <field id="age" type="string" />
+        <field id="imageUrl" type="string" />
+    </interface>
+    <script type="text/brightscript" uri="UserInfoNode.brs"/>
+</component>

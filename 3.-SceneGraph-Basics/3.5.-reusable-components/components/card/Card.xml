@@ -1,0 +1,46 @@
+<component name="Card" extends="Group">
+    <interface>
+        <field id="firstName" type="string" alias="firstName.text" />
+        <field id="lastName" type="string" alias="lastName.text" />
+        <field id="imageUrl" type="string" alias="image.uri" />
+    </interface>
+    <children>
+        <Rectangle
+            id="background"
+            color="#440044FF"
+            width="400"
+            height="220"
+        >
+            <Poster
+                id="image"
+                uri="pkg:/images/image.jpg"
+                width="200"
+                height="200"
+                translation="[10,10]" 
+            />
+
+            <Label
+                id="firstName"
+                height="44"
+                width="0"
+                font="font:MediumBoldSystemFont"
+                text="Test Label!"
+                horizAlign="left"
+                vertAlign="center"
+                translation="[220,10]" 
+            />
+
+            <Label
+                id="lastName"
+                height="44"
+                width="0"
+                font="font:MediumBoldSystemFont"
+                text="Test Label!"
+                horizAlign="left"
+                vertAlign="center"
+                translation="[220,45]" 
+            />
+        </Rectangle>
+    </children>
+    <script type="text/brightscript" uri="Card.brs"/>
+</component>

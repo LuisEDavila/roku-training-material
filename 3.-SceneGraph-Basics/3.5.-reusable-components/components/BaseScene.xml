@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="BaseScene" extends="Scene">
+    <children>
+        <Card id="user1"
+            firstName="John"
+            lastName="Doe"
+            imageUrl="https://picsum.photos/id/240/200/200"
+        />
+
+        <Card id="user2"
+            translation="[0, 230]"
+            firstName="John"
+            lastName="Doe"
+            imageUrl="https://picsum.photos/id/240/200/200"
+        />
+    </children>
+    <script type="text/brightscript" uri="pkg:/components/BaseScene.brs"/>
+</component>
