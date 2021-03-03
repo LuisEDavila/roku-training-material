@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="BaseScene" extends="Scene">
+    <children>
+        <Label id="searchTermLabel"
+            translation="[320, 60]" />
+            
+        <TextEditBox id="searchTextBox"
+            width="200"
+            translation="[30, 50]" />
+
+        <Keyboard id="searchKeyboard"
+            translation="[20, 100]" />
+
+        <!-- <CenteredButton id="searchButton"
+            text="Search"
+            focusedIconUri=""
+            iconUri=""
+            maxWidth="150"
+            height="80"
+            translation="[30, 380]" /> -->
+
+        <Button id="searchButton"
+            text="Search"
+            focusedIconUri=""
+            iconUri=""
+            maxWidth="150"
+            height="80"
+            translation="[30, 380]" />
+    </children>
+    <script type="text/brightscript" uri="pkg:/components/BaseScene.brs"/>
+</component>
