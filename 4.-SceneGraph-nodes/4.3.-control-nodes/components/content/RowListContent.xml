@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="RowListContent" extends="ContentNode" >
+
+    <children>
+        <ContentNode title="Rowlist example">
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/201/300/300" 
+                title="Workstation" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/237/300/300" 
+                title="Dog" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/238/300/300" 
+                title="City" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/210/300/300" 
+                title="Wall" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/213/300/300" 
+                title="Sea" />
+        </ContentNode>
+        <ContentNode title="Rowlist example (row 2)">
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/201/300/300" 
+                title="Workstation" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/237/300/300" 
+                title="Dog" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/238/300/300" 
+                title="City" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/210/300/300" 
+                title="Wall" />
+            <ContentNode 
+                HDPosterUrl="https://picsum.photos/id/213/300/300" 
+                title="Sea" />
+        </ContentNode>
+    </children>
+</component>
