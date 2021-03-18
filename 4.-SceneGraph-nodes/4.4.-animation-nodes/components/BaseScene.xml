@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="BaseScene" extends="Scene">
+    <children>
+        <Group
+            id="mainContainer"
+            translation="[0,0]"
+            opacity="1" >
+            <Label
+                id="titleLabel"
+                text="Animation Example"
+                translation="[30, 30]">
+            </Label>
+            <LabelList
+                id="labelList"
+                translation="[30,90]"
+                itemSize="[220,48]"
+                vertFocusAnimationStyle="floatingFocus">
+                <ContentNode role="content">
+                    <ContentNode title="Drama" />
+                    <ContentNode title="Action" />
+                    <ContentNode title="Horror" />
+                    <ContentNode title="Comedy" />
+                </ContentNode>
+            </LabelList>
+            <RowList 
+                id="rowList"
+                translation="[300,90]"
+                itemComponentName="RowListItem"
+                numRows="2"
+                itemSize="[950,320]"
+                rowItemSize="[[250,250]]"
+                rowItemSpacing="[[15,0]]"
+                rowLabelOffset="[[0, 20]]"
+                showRowLabel="[true]"
+                showRowCounter="[true]"
+                rowFocusAnimationStyle="floatingFocus"
+                vertFocusAnimationStyle="floatingFocus" />
+            <TimeGrid
+                id="timeGrid"
+                translation="[0, 820]"
+                channelNoDataText="Loading..."
+                loadingDataText="Loading..."
+                automaticLoadingDataFeedback="true"
+                numRows="4"
+                fillProgramGaps="true"
+                channelInfoFocusable="true"
+                vertFocusAnimationStyle="floatingFocus" />
+        </Group>
+
+        <!-- Animation with vector 2D interpolator -->
+        <Animation 
+            id="translationAnimation"
+            duration="0.5"
+            repeat="false"
+            easeFunction="linear">
+            <Vector2DFieldInterpolator 
+                id="translationInterpolator"
+                fieldToInterp="mainContainer.translation"
+                key="[0.0, 1.0]" />
+        </Animation>
+
+        <!-- Animation with float interpolartor -->
+        <!-- <Animation 
+            id="opacityAnimation" 
+            duration="2.5" 
+            easeFunction="inOutQuad">
+            <FloatFieldInterpolator 
+                id="opacityInterpolation" 
+                key="[0.0, 1.0]" 
+                keyValue="[0.0, 1.0]" 
+                fieldToInterp="mainContainer.opacity" />
+        </Animation> -->
+
+        <!-- Color animation with multiple interpolator -->
+        <!-- <Animation id="colorAnimation" duration="50" repeat="true" control="start" easeFunction="linear">
+            <ColorFieldInterpolator 
+                id="colorLabelListFocusInterpolation" 
+                key="[0.0, 0.33, 0.66, 1.0]" 
+                keyValue="[0xFF0000FF, 0x00FF00FF, 0x0000FFFF, 0xFF0000FF]" 
+                fieldToInterp="labelList.focusBitmapBlendColor" />
+            <ColorFieldInterpolator 
+                id="colorLabelInterpolation" 
+                key="[0.0, 0.33, 0.66, 1.0]" 
+                keyValue="[0xFF0000FF, 0x00FF00FF, 0x0000FFFF, 0xFF0000FF]" 
+                fieldToInterp="titleLabel.color" />
+        </Animation> -->
+    </children>
+    <script type="text/brightscript" uri="pkg:/components/BaseScene.brs"/>
+</component>
