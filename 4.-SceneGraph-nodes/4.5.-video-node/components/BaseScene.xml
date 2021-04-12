@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="BaseScene" extends="Scene">
+    <children>
+        <!-- <Video id="video" /> -->
+        <ExtendedVideo 
+            id="video"
+            loop="true"
+            width="0"
+            height="0"
+            enableUI="false"
+            enableTrickplay="false" />
+    </children>
+    <script type="text/brightscript" uri="pkg:/components/BaseScene.brs"/>
+</component>
