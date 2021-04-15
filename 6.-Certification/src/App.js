@@ -62,24 +62,84 @@ function App() {
                 <CodePane
                     language="basic"
                     theme={theme.codeTheme.brs}
+                    highlightRanges={[1, [4, 5], [10, 13], [15, 20], 22, [26, 28], [45, 54], 49, [50, 54], 55, [60, 70], [62, 65]]}
                 >
                     {`  
-                        function onKeyEvent(key as String, press as Boolean) as Boolean
-                            if press
-                                if key = "fastforward" OR key = "right"
-                                    m.video.seek = m.video.position + m.SEEK_STEP_IN_SEC
-                                else if key = "rewind" OR key = "left"
-                                    m.video.seek = m.video.position - m.SEEK_STEP_IN_SEC
-                                else if key = "play"
-                                    if m.video.state = "paused"
-                                        m.video.control = "resume"
-                                    else
-                                        m.video.control = "pause"
+                        Library "Roku_Ads.brs"
+
+                        sub init()
+                            m.top.functionName = "playContentWithAds" 
+                            m.top.id = "PlayerTask"
+                        end sub
+
+                        sub playContentWithAds()
+   
+                            video = m.top.video
+                            view = video.getParent() ' is the node under which RAF should display its UI (passed as 3rd argument of showAds())
+
+                            RAF = Roku_Ads()
+
+                            content = video.content
+
+                            RAF.setAdUrl(content.ad_url)
+                            RAF.enableAdMeasurements(true)
+                            RAF.setContentGenre(content.categories)  'if unset, ContentNode has it as []
+                            RAF.setContentLength(content.length)
+
+                            adPods = RAF.getAds() ' set the stream adpods
+                            keepPlaying = true 
+
+                            ' show the pre-roll ads, if any
+                            if adPods <> invalid and adPods.count() > 0
+                                keepPlaying = RAF.showAds(adPods, invalid, view) ' if it returns false, playback should be canceled
+                            end if
+
+                            port = CreateObject("roMessagePort")
+                            if keepPlaying ' playback cancel if false
+                                video.observeField("position", port)
+                                video.observeField("state", port)
+                                video.visible = true
+                                video.control = "play"
+                                video.setFocus(true)
+                            end if
+
+                            curPos = 0
+                            adPods = invalid
+                            isPlayingPostroll = false
+                            while keepPlaying
+                                msg = wait(0, port)
+                                if type(msg) = "roSGNodeEvent"
+                                    if msg.GetField() = "position" then
+                                        ' keep track of where we reached in content
+                                        curPos = msg.GetData() 
+                                        ' check for mid-roll ads
+                                        adPods = RAF.getAds(msg)
+                                        if adPods <> invalid and adPods.count() > 0
+                                            print "PlayerTask: mid-roll ads, stopping video"
+                                            'ask the video to stop - the rest is handled in the state=stopped event below
+                                            video.control = "stop"  
+                                        end if
+                                    else if msg.GetField() = "state"
+                                        curState = msg.GetData()
+                                        if curState = "stopped" then
+                                            ...
+                                            ...
+                                        else if curState = "finished"
+                                            ' render post-roll ads
+                                            adPods = RAF.getAds(msg)
+                                            if adPods = invalid or adPods.count() = 0 then 
+                                                exit while
+                                            end if
+
+                                            isPlayingPostroll = true
+                                            
+                                            ' stop the video, the post-roll would show when the state changes to  "stopped" (above)
+                                            video.control = "stop"
+                                        end if
                                     end if
                                 end if
-                            end if
-                            return true
-                        end function
+                            end while
+                        end sub
                     `}
                 </CodePane>
             </Slide>
@@ -96,24 +156,36 @@ function App() {
                 <CodePane
                     language="basic"
                     theme={theme.codeTheme.brs}
+                    highlightRanges={[5, [11, 14], [16, 21], [23, 27]]}
                 >
                     {`  
-                        function onKeyEvent(key as String, press as Boolean) as Boolean
-                            if press
-                                if key = "fastforward" OR key = "right"
-                                    m.video.seek = m.video.position + m.SEEK_STEP_IN_SEC
-                                else if key = "rewind" OR key = "left"
-                                    m.video.seek = m.video.position - m.SEEK_STEP_IN_SEC
-                                else if key = "play"
-                                    if m.video.state = "paused"
-                                        m.video.control = "resume"
-                                    else
-                                        m.video.control = "pause"
-                                    end if
-                                end if
-                            end if
-                            return true
-                        end function
+                        sub init()
+                            ...
+                            ...
+
+                            m.channelStore = CreateObject("roChannelStore")
+                        sub
+
+                        ...
+                        ...
+
+                        sub loadCatalog()
+                            m.channelStore.observeField("catalog", "onCatalog")
+                            m.channelStore.command = "getCatalog"
+                        end sub
+
+                        sub onCatalog()
+                            catalog = m.channelStore.catalog
+                            ' build ui from catalog
+                            ...
+                            ...
+                        end sub
+
+                        sub doOrder(orderData as Object)
+                            m.channelStore.observeField("orderStatus", "onOrderStatus")
+                            m.channelStore.order = orderData
+                            m.channelStore.command = "doOrder"
+                        end sub
                     `}
                 </CodePane>
             </Slide>
@@ -138,24 +210,27 @@ function App() {
                 <CodePane
                     language="basic"
                     theme={theme.codeTheme.brs}
+                    highlightRanges={[11, [15, 16]]}
                 >
                     {`  
-                        function onKeyEvent(key as String, press as Boolean) as Boolean
-                            if press
-                                if key = "fastforward" OR key = "right"
-                                    m.video.seek = m.video.position + m.SEEK_STEP_IN_SEC
-                                else if key = "rewind" OR key = "left"
-                                    m.video.seek = m.video.position - m.SEEK_STEP_IN_SEC
-                                else if key = "play"
-                                    if m.video.state = "paused"
-                                        m.video.control = "resume"
-                                    else
-                                        m.video.control = "pause"
-                                    end if
-                                end if
-                            end if
-                            return true
-                        end function
+                        ' home page 
+                        sub init()
+                            ...
+                            ...
+                            renderPageContent()
+                        end sub
+
+                        sub renderPageContent()
+                            ...
+                            ...
+                            m.top.scene.signalBeacon(“AppLaunchComplete”)
+                        end sub
+
+                        ...
+                            scene.signalBeacon(“AppDialogInitiate”)
+                            scene.signalBeacon(“AppDialogComplete”)
+                        ...
+                        ...
                     `}
                 </CodePane>
             </Slide>
@@ -240,24 +315,96 @@ function App() {
                 <CodePane
                     language="basic"
                     theme={theme.codeTheme.brs}
+                    highlightRanges={[2, [7, 8]]}
                 >
                     {`  
-                        function onKeyEvent(key as String, press as Boolean) as Boolean
-                            if press
-                                if key = "fastforward" OR key = "right"
-                                    m.video.seek = m.video.position + m.SEEK_STEP_IN_SEC
-                                else if key = "rewind" OR key = "left"
-                                    m.video.seek = m.video.position - m.SEEK_STEP_IN_SEC
-                                else if key = "play"
-                                    if m.video.state = "paused"
-                                        m.video.control = "resume"
-                                    else
-                                        m.video.control = "pause"
+                        'Roku app Entry point (main.brs)
+                        sub main(args as dynamic)
+                            m.port = CreateObject("roMessagePort")
+                            screen = CreateObject("roSGScreen")
+                            screen.setMessagePort(m.port)
+                        
+                            scene = screen.CreateScene("BaseScene")
+                            scene.launchArgs = args
+
+                            screen.show()
+                        
+                            while(true) ' Normal infinite loop
+                                ...
+                                ...
+                            end while
+                        end sub
+                    `}
+                </CodePane>
+            </Slide>
+            <Slide backgroundColor="primary" slideNum="18">
+                <Heading color="secondary">Handling Deeplinking</Heading>
+                <CodePane
+                    language="basic"
+                    theme={theme.codeTheme.brs}
+                    highlightRanges={[5, [8, 26], 9, 10, [11, 15], [16, 21], [22, 25]]}
+                >
+                    {`  
+                        ' scene script (e.g. BaseScene.brs)
+                        sub init()
+                            ...
+                            ...
+                            m.top.observeField("launchArgs", "handleDeeplink")
+                        end sub
+
+                        sub handleDeeplink(event as object)
+                            args = event.getData
+                            if (args.mediaType = "movie" or args.mediaType = "episode" or args.mediaType = "short-form" or args.mediaType = "series" or args.mediaType = "special")
+                                if validate(args.contentId)
+                                    'play content directly, starting at last bookmarked position
+                                else
+                                    'pop an error message and launch channel home page.
+                                end if
+                            else if (args.mediaType = “season”)
+                                if validate(args.contentId)
+                                    'display an episodic picker screen with the episode of the contentId selected
+                                else
+                                    'pop an error message and launch channel home page.
+                                end if
+                            else
+                                'deep linking issue such as contentId not matching any content in the partner's catalog
+                                'display an appropriate error message for the user and launch home page.
+                            end if
+                        end sub
+                    `}
+                </CodePane>
+            </Slide>
+            <Slide backgroundColor="primary" slideNum="18">
+                <Heading color="secondary">Handling Input Deeplinking</Heading>
+                <CodePane
+                    language="basic"
+                    theme={theme.codeTheme.brs}
+                    highlightRanges={[[12, 21], [15, 19], 18]}
+                >
+                    {`  
+                        'Roku app Entry point (main.brs)
+                        sub main(args as dynamic)
+                            ...
+                            ...
+                        
+                            while(true)
+                                msg = wait(0, m.port)
+                                msgType = type(msg)
+                                if msgType = "roSGScreenEvent"
+                                    if msg.isScreenClosed() then return
+                                end if
+                                if type(msg) = "roInputEvent"
+                                    if msg.IsInput()
+                                        info = msg.GetInfo()
+                                        if info.DoesExist("mediatype") and info.DoesExist("contentid")
+                                            mediaType = info.mediatype
+                                            contentId = info.contentid
+                                            scene.deeplinkParams = {mediaType: mediaType, contentId: contentId}
+                                        end if
                                     end if
                                 end if
-                            end if
-                            return true
-                        end function
+                            end while
+                        end sub
                     `}
                 </CodePane>
             </Slide>

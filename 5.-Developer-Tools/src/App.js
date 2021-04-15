@@ -116,7 +116,7 @@ function App() {
                     <Image width="80%" src="./images/static_analysis_example.png" />
                 </FlexBox>
             </Slide>
-            <Slide backgroundColor="primary" slideNum="13">
+            {/* <Slide backgroundColor="primary" slideNum="13">
                 <FlexBox>
                     <Image width="100px" src="./images/ic_static_channel_analysis.png" />
                     <Heading color="secondary">Static Channel Analysis</Heading>
@@ -126,26 +126,30 @@ function App() {
                     theme={theme.codeTheme.brs}
                 >
                     {`  
-                        function onKeyEvent(key as String, press as Boolean) as Boolean
-                            if press
-                                if key = "fastforward" OR key = "right"
-                                    m.video.seek = m.video.position + m.SEEK_STEP_IN_SEC
-                                else if key = "rewind" OR key = "left"
-                                    m.video.seek = m.video.position - m.SEEK_STEP_IN_SEC
-                                else if key = "play"
-                                    if m.video.state = "paused"
-                                        m.video.control = "resume"
-                                    else
-                                        m.video.control = "pause"
-                                    end if
+                        ' Roku app Entry point (main.brs)
+                        sub main(args as dynamic)
+                            m.port = CreateObject("roMessagePort")
+                            screen = CreateObject("roSGScreen")
+                            screen.setMessagePort(m.port)
+                        
+                            scene = screen.CreateScene("BaseScene")
+                            scene.launchArgs = args
+
+                            screen.show()
+                        
+                            while(true) ' Normal infinite loop
+                                msg = m.port.getMessage()
+                                msgType = type(msg)
+                        
+                                if msgType = "roSGScreenEvent"
+                                    if msg.isScreenClosed() then return
                                 end if
-                            end if
-                            return true
-                        end function
+                            end while
+                        end sub
                     `}
                 </CodePane>
-            </Slide>
-            <Slide backgroundColor="primary" slideNum="21">
+            </Slide> */}
+            <Slide backgroundColor="primary" slideNum="14">
                 <FlexBox {...flexBoxStyle}>
                     <Heading fontSize="header" color="secondary">Fin.</Heading>
                 </FlexBox>
